@@ -4,12 +4,16 @@ import { RegisterDto } from './dto/register.dto';
 
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly usersService: UsersService) { };
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly jwtService: JwtService
+    ) { };
 
-    async register ({password, email, name}: RegisterDto) {
+    async register({ password, email, name }: RegisterDto) {
         const userFound = await this.usersService.findOneByEmail(email);
 
         if (userFound) {
@@ -21,7 +25,7 @@ export class AuthService {
         const newUser = await this.usersService.create({
             name,
             email,
-            password: hashedPassword   
+            password: hashedPassword
         });
 
         return {
@@ -29,7 +33,7 @@ export class AuthService {
         }
     }
 
-    async login ({email, password}: LoginDto) {
+    async login({ email, password }: LoginDto) {
         const user = await this.usersService.findOneByEmail(email);
 
         if (!user) {
@@ -42,7 +46,11 @@ export class AuthService {
             throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
         }
 
+        const payload = { email: user.email };
+        const token = await this.jwtService.signAsync(payload)
+
         return {
+            token: token,
             email: user.email
         };
     }
