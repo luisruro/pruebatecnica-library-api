@@ -3,6 +3,7 @@ import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -26,5 +27,23 @@ export class AuthService {
         return {
             message: `User created successfully`
         }
+    }
+
+    async login ({email, password}: LoginDto) {
+        const user = await this.usersService.findOneByEmail(email);
+
+        if (!user) {
+            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+
+        if (!isPasswordValid) {
+            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        }
+
+        return {
+            email: user.email
+        };
     }
 }
