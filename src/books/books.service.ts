@@ -19,7 +19,8 @@ export class BooksService {
         })
 
         if (bookFound) {
-            throw new HttpException(`Book already exists: ${bookFound}`, HttpStatus.CONFLICT);
+
+            throw new HttpException(`Book already exists: ${book.title}`, HttpStatus.CONFLICT);
         }
 
         const newBook = this.bookRepository.create(book);

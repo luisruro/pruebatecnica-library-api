@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { BooksModule } from './books/books.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
 import configuration from './common/config/configuration';
 
 @Module({
@@ -24,6 +25,7 @@ import configuration from './common/config/configuration';
       synchronize: true,
     }),
   }),
-    BooksModule],
+    BooksModule,
+    UsersModule],
 })
 export class AppModule { }
