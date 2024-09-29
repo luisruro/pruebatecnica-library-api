@@ -11,7 +11,7 @@ export class RegisterDto {
     @IsNotEmpty({message: 'Email is required and must be a valid email address'})
     @IsString()
     @IsEmail({},{ message: 'Please provide a valid email address' })
-    emil:string;
+    email:string;
 
     @IsNotEmpty({message: 'Password is required and must be a valid password: at least 8 characters, 1 upper case, at least one digit from (0-9) and at least one special character'})
     @IsString()
