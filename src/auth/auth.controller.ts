@@ -4,6 +4,13 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from './guard/auth.guard';
 
+interface RequestWithUser extends Request {
+    user: {
+        email: string;
+        rol: string;
+    }
+}
+
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) { };
@@ -19,9 +26,9 @@ export class AuthController {
         return this.authService.login(loginDto);
     }
 
-    @Get('profile')
     @UseGuards(AuthGuard)
-    profile(@Request() req) {
+    @Get('profile')
+    profile(@Request() req: RequestWithUser) {
         return req.user;
     }
 }
