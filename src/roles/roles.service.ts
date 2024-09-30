@@ -29,14 +29,17 @@ export class RolesService {
     }
 
     async getAllRoles() {
-        return await this.roleRepository.find();
+        return await this.roleRepository.find({
+            relations: ['users']
+        });
     }
 
     async getRoleById(id: string) {
         const roleFound = await this.roleRepository.findOne({
             where: {
                 id
-            }
+            },
+            relations: ['users']
         });
 
         if (!roleFound) {
@@ -46,10 +49,13 @@ export class RolesService {
         return roleFound;
     }
 
-    async getRoleByRol(role: string) {
+    async getRoleByRol(role) {
+
+        const normalizedRole = role.toLocaleLowerCase().trim();
+
         const roleFound = await this.roleRepository.findOne({
             where: {
-                role
+                role: normalizedRole
             }
         });
 

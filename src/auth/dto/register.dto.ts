@@ -1,5 +1,6 @@
 import { Transform } from "class-transformer";
-import { IsEmail, IsNotEmpty, IsString, IsStrongPassword, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword, MinLength } from "class-validator";
+import { Role } from "src/roles/entities/role.entity";
 
 export class RegisterDto {
 
@@ -18,4 +19,8 @@ export class RegisterDto {
     @IsStrongPassword({},{ message: 'Please provide a valid password: at least 8 characters, at least 1 upper case, at least one digit from (0-9) and at least one special character' })
     @Transform(({value }) => value.trim())//For not accept only spaces in the password
     password: string;
+
+    @IsOptional()
+    @IsString()
+    rol: string;
 }

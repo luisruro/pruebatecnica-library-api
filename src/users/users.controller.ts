@@ -6,7 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 
 @Controller('users')
-@Auth([Rol.ADMIN])
+//@Auth([Rol.ADMIN, Rol.USER])
 export class UsersController {
     constructor(private readonly usersService: UsersService) {};
 
