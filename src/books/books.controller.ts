@@ -10,7 +10,7 @@ export class BooksController {
     constructor(private booksService: BooksService) { }
 
     @Post()
-    @Auth(Rol.ADMIN)
+    @Auth([Rol.ADMIN])
     createBook(@Body() newBook: CreateBookDto) {
         return this.booksService.createBook(newBook);
     }

@@ -40,7 +40,7 @@ export class AuthController {
     }
 
     @Get('profile2')
-    @Auth(Rol.ADMIN)//It already contains those guards: AuthGuard, RolesGuard
+    @Auth([Rol.ADMIN])//It already contains those guards: AuthGuard, RolesGuard
     profile2(
         @Request()
         req: RequestWithUser,
@@ -49,7 +49,7 @@ export class AuthController {
     }
 
     @Get('profile')
-    @Auth(Rol.USER)
+    @Auth([Rol.USER])
     profile(@ActiveUser() user: ActiveUserInterface) { //@ActiveUser() es una decorador personalizado
         console.log(user)
         return this.authService.profile(user);

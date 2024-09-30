@@ -11,23 +11,29 @@ export class RolesGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
 
-    const rol = this.reflector.getAllAndOverride<Rol[]>(ROLES_KEY, [
+
+    //To access metadata astablished in @Roles decorator
+    //This method retrieves the allowed roles to the current route or controller
+    const roles = this.reflector.getAllAndOverride<Rol[]>(ROLES_KEY, [
       context.getClass(),
       context.getHandler(),
     ])
 
-    console.log(rol);
+    console.log(roles);
 
-    if (!rol) {
+    //If no roles are specified, the route or controller is accessible by anyone. It means that rout does not need protection.
+    if (!roles) {
       return true;
     }
 
     const { user } = context.switchToHttp().getRequest();
-
-    if(user.rol === Rol.ADMIN) {
-      return true;
+    console.log(user); //{email: 'luisruro@live.com', rol: 'user', iat: 1727713784, exp: 1727800184}
+    
+    //Validating user role
+    if (!user || !user.rol || !roles.includes(user.rol)) {
+      throw new ForbiddenException('Access denied, you are unauthorized');
     }
 
-    return rol === user.rol;
+    return true;
   }
 }
