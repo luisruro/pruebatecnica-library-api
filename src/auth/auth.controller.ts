@@ -5,6 +5,7 @@ import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from './guard/auth/auth.guard';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guard/roles/roles.guard';
+import { Rol } from './enums/role.enum';
 
 interface RequestWithUser extends Request {
     user: {
@@ -29,7 +30,7 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard, RolesGuard)
-    @Roles('user')
+    @Roles(Rol.USER)
     @Get('profile')
     profile(@Request() req: RequestWithUser) {
         return req.user;
