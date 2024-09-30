@@ -68,10 +68,7 @@ export class RolesService {
             throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
         }
 
-        return {
-            message: `Role with id: ${id} has been deleted successfully.`,
-            result: result
-        };
+        return result;
     }
 
     async updateRole(id: string, role: UpdateRoleDto) {
