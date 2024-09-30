@@ -13,7 +13,7 @@ export class UsersService {
     }
 
     async findOneByEmail(email: string): Promise<User> {
-        return await this.usersRepository.findOneBy({email});
+        return await this.usersRepository.findOneBy({ email });
     }
 
     async create(createUserDto: CreateUserDto): Promise<User> {
@@ -23,8 +23,46 @@ export class UsersService {
 
     async findOneByEmailWithPassword(email: string) {
         return await this.usersRepository.findOne({
-            where: {email},
-            select: ['id', 'name', 'email', 'rol', 'creationDate', 'deletedAt'],
+            where: { email },
+            select: ['id', 'name', 'email', 'password', 'rol', 'creationDate', 'deletedAt'],
         });
+    }
+
+    async findOne(id: string) {
+        const userFound = await this.usersRepository.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (!userFound) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        return userFound;
+    }
+
+    async deleteUser(id: string) {
+        const result = await this.usersRepository.delete({ id });
+
+        if (result.affected === 0) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        return result;
+    }
+
+    async updateUser(id: string, user: CreateUserDto) { 
+        const userFound = await this.usersRepository.findOne({
+            where: {
+                id
+            }
+        });
+        
+        if (!userFound) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        return this.usersRepository.update(id, user);
     }
 }
