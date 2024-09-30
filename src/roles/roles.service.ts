@@ -1,4 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from './entities/role.entity';
+import { Repository } from 'typeorm';
+import { CreateRoleDto } from './dto/create-role.dto';
 
 @Injectable()
-export class RolesService {}
+export class RolesService {
+    constructor(@InjectRepository(Role) private readonly roleRepository: Repository<Role>) { };
+
+    async createRole(role: CreateRoleDto) {
+        const roleFound = await this.roleRepository.findOne({
+            where: {
+                role: role.role
+            }
+        });
+
+        console.log(roleFound);
+
+        if (roleFound) {
+            throw new HttpException(`Role: ${role.role} already exists.`, HttpStatus.CONFLICT);
+        }
+
+        const newRole = this.roleRepository.create(role);
+        const saveRole = await this.roleRepository.save(newRole);
+
+        return saveRole;
+    }
+
+    async getAllRoles() {
+        return await this.roleRepository.find();
+    }
+
+    async getRoleById(id: string) {
+        const roleFound = await this.roleRepository.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (!roleFound) {
+            throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
+        }
+
+        return roleFound;
+    }
+
+    async getRoleByRol(role: string) {
+        const roleFound = await this.roleRepository.findOne({
+            where: {
+                role
+            }
+        });
+
+        if (!roleFound) {
+            throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
+        }
+
+        return roleFound;
+    }
+
+    async deleteRole(id: string) {
+
+        const result = await this.roleRepository.delete({id});
+
+        if (result.affected === 0) {
+            throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
+        }
+
+        return {
+            message: `Role with id: ${id} has been deleted successfully.`,
+            result: result
+        };
+    }
+}
