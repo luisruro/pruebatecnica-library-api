@@ -54,4 +54,8 @@ export class AuthService {
             email: user.email
         };
     }
+
+    async profile({ email, rol }: { email: string; rol: string }) {
+        return await this.usersService.findOneByEmail(email);
+      }
 }

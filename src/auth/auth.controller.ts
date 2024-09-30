@@ -7,6 +7,8 @@ import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guard/roles/roles.guard';
 import { Rol } from './enums/role.enum';
 import { Auth } from './decorators/auth.decorator';
+import { ActiveUser } from 'src/common/decorators/active-user.decorator';
+import { ActiveUserInterface } from 'src/common/interfaces/active-user.interface';
 
 interface RequestWithUser extends Request {
     user: {
@@ -32,8 +34,8 @@ export class AuthController {
 
     @UseGuards(AuthGuard, RolesGuard)
     @Roles(Rol.USER)
-    @Get('profile')
-    profile(@Request() req: RequestWithUser) {
+    @Get('profile1')
+    profile1(@Request() req: RequestWithUser) {
         return req.user;
     }
 
@@ -44,5 +46,12 @@ export class AuthController {
         req: RequestWithUser,
     ) {
         return req.user;
+    }
+
+    @Get('profile')
+    @Auth(Rol.USER)
+    profile(@ActiveUser() user: ActiveUserInterface) { //@ActiveUser() es una decorador personalizado
+        console.log(user)
+        return this.authService.profile(user);
     }
 }
