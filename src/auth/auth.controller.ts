@@ -5,10 +5,10 @@ import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from './guard/auth/auth.guard';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guard/roles/roles.guard';
-import { Rol } from './enums/role.enum';
 import { Auth } from './decorators/auth.decorator';
 import { ActiveUser } from 'src/common/decorators/active-user.decorator';
 import { ActiveUserInterface } from 'src/common/interfaces/active-user.interface';
+import { Rol } from 'src/common/enums/role.enum';
 
 interface RequestWithUser extends Request {
     user: {

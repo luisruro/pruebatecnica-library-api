@@ -4,8 +4,9 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Rol } from 'src/common/enums/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 
-@Auth(Rol.ADMIN)
+
 @Controller('users')
+@Auth(Rol.ADMIN)
 export class UsersController {
     constructor(private readonly usersService: UsersService) {};
 
