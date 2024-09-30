@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 import { Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RolesService {
@@ -71,5 +72,19 @@ export class RolesService {
             message: `Role with id: ${id} has been deleted successfully.`,
             result: result
         };
+    }
+
+    async updateRole(id: string, role: UpdateRoleDto) {
+        const roleFound = await this.roleRepository.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (!roleFound) {
+            throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
+        }
+
+        return this.roleRepository.update(id, role);
     }
 }
