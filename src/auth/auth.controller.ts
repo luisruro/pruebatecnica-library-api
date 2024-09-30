@@ -6,6 +6,7 @@ import { AuthGuard } from './guard/auth/auth.guard';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guard/roles/roles.guard';
 import { Rol } from './enums/role.enum';
+import { Auth } from './decorators/auth.decorator';
 
 interface RequestWithUser extends Request {
     user: {
@@ -33,6 +34,15 @@ export class AuthController {
     @Roles(Rol.USER)
     @Get('profile')
     profile(@Request() req: RequestWithUser) {
+        return req.user;
+    }
+
+    @Get('profile2')
+    @Auth(Rol.ADMIN)//It already contains those guards: AuthGuard, RolesGuard
+    profile2(
+        @Request()
+        req: RequestWithUser,
+    ) {
         return req.user;
     }
 }
