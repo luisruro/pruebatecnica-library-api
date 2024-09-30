@@ -1,5 +1,6 @@
 import { Rol } from "src/common/enums/role.enum";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "src/roles/entities/role.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Users')
 export class User {
@@ -15,12 +16,13 @@ export class User {
     @Column({ nullable: false, select: false })
     password: string;
 
-    @Column({ type: 'enum', enum: Rol, default: Rol.USER })
-    rol: Rol;
+    // @Column({ type: 'enum', enum: Rol, default: Rol.USER })
+    // rol: Rol;
+
+    @ManyToOne(() => Role, role => role.users, {onDelete: 'CASCADE'})
+    @JoinColumn()
+    rol: Role
 
     @CreateDateColumn()
     creationDate: Date;
-
-    @DeleteDateColumn()
-    deletedAt: Date;
 }
