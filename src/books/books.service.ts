@@ -26,4 +26,14 @@ export class BooksService {
         const newBook = this.bookRepository.create(book);
         return this.bookRepository.save(newBook);
     }
+
+    async findAll(): Promise<Book[]> {
+        const bookFound = await this.bookRepository.find();
+
+        if (!bookFound) {
+            throw new HttpException('No books found', HttpStatus.NOT_FOUND);
+        }
+
+        return bookFound;
+    }
 }
