@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
@@ -13,13 +13,22 @@ export class BooksController {
 
     @Post()
     @Auth([Rol.ADMIN])
-    createBook(@Body() newBook: CreateBookDto) {
-        return this.booksService.createBook(newBook);
+    async createBook(@Body() newBook: CreateBookDto) {
+        return await this.booksService.createBook(newBook);
     }
 
     @Get()
-    @Auth([Rol.ADMIN])
-    findAll() {
-        return this.booksService.findAll();
+    //@Auth([Rol.ADMIN])
+    async findAll() {
+        return await this.booksService.findAll();
+    }
+
+    @Get(':filtered')
+    async findBooksFiltered (
+        @Query('author') author?: string,
+        @Query('publicationDate') publicationDate?: string,
+        @Query('genre') genre?: string
+    ) {
+        return await this.booksService.findBooksFiltered({ author, publicationDate, genre });
     }
 }
